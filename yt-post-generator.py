@@ -7,6 +7,8 @@ from datetime import datetime
 import googleapiclient.discovery
 import googleapiclient.errors
 
+FRONTMATTER_DELIM = '+++'
+
 class Video:
     def __init__(self, title, video_id, publish_date):
         self.title = title
@@ -18,6 +20,21 @@ class Video:
 
     def __repr__(self):
         return self.__str__()
+
+class HugoPost:
+    def __init__(self, frontmatter, content):
+        self.frontmatter = frontmatter
+        self.content = content
+
+    def __str__(self):
+        # TODO what about array frontmatter items?
+        lines = [FRONTMATTER_DELIM]
+        for key,value in self.frontmatter.items:
+            lines.append(f'{key} = {value}')
+        lines.append(FRONTMATTER_DELIM)
+        lines.append(self.content)
+
+        return '\n'.join(lines)
 
 def fetch_uploads(api_key, channel_id, count):
     api_service_name = "youtube"
