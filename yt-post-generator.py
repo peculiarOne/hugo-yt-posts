@@ -1,8 +1,23 @@
 import os
+
 from dotenv import load_dotenv
+from dateutil import parser
+from datetime import datetime
 
 import googleapiclient.discovery
 import googleapiclient.errors
+
+class Video:
+    def __init__(self, title, video_id, publish_date):
+        self.title = title
+        self.video_id = video_id
+        self.publish_date = publish_date
+
+    def __str__(self):
+        return self.title + ", id: " + self.video_id + ", published: " + self.publish_date.strftime('%c')
+
+    def __repr__(self):
+        return self.__str__()
 
 def fetch_uploads(api_key, channel_id, count):
     api_service_name = "youtube"
@@ -23,11 +38,21 @@ def fetch_uploads(api_key, channel_id, count):
     playlist_items_request = youtube.playlistItems().list(
         playlistId=uploads,
         part="snippet",
-        maxResults=15
+        maxResults=count
     )
     playlist_items_response = playlist_items_request.execute()
+
+    def item_to_video(playlist_item):
+        print("playlist item:\n", playlist_item)
+        return Video(
+            publish_date = parser.isoparse(playlist_item["snippet"]["publishedAt"]),
+            title = playlist_item["snippet"]["title"],
+            video_id = playlist_item["snippet"]["resourceId"]["videoId"],
+        )
+
+    videos = list(map(item_to_video, playlist_items_response["items"]))
     print("\n")
-    print("playlist:\n", playlist_items_response)
+    print("found videos:\n", videos)
 
 def main():
 
