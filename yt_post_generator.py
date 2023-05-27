@@ -29,12 +29,22 @@ class HugoPost:
     def __str__(self):
         # TODO what about array frontmatter items?
         lines = [FRONTMATTER_DELIM]
-        for key,value in self.frontmatter.items:
+        for key,value in self.frontmatter.items():
             lines.append(f'{key} = {value}')
         lines.append(FRONTMATTER_DELIM)
         lines.append(self.content)
 
         return '\n'.join(lines)
+
+def video_to_post(video):
+    return HugoPost(
+        frontmatter = {
+            "title": video.title,
+            "date": video.publish_date.strftime("%Y-%m-%d"),
+            "video_id": video.video_id
+        },
+        content = ""
+    )
 
 def fetch_uploads(api_key, channel_id, count):
     api_service_name = "youtube"
@@ -71,7 +81,7 @@ def fetch_uploads(api_key, channel_id, count):
     print("\n")
     print("found videos:\n", videos)
 
-def main():
+def main(out_dir):
 
     load_dotenv()
 
