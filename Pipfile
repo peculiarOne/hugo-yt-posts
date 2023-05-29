@@ -8,7 +8,6 @@ google-api-python-client = "*"
 python-dotenv = "*"
 python-dateutil = "*"
 requests = "*"
-python-ulid = "*"
 
 [dev-packages]
 

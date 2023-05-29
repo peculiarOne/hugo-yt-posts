@@ -55,12 +55,12 @@ def video_to_post(video, thumbnail):
 def write_video(video, section, out_dir):
     ulid = str(ULID())
 
-    rel_thumbnail = f'img/{section}/{ulid}.jpg'
+    rel_thumbnail = f'img/{section}/{video.video_id}.jpg'
     thumbnail_file = f'{out_dir}/static/{rel_thumbnail}'
     download_thumbnail(video.thumbnail_url, thumbnail_file)
 
     hugo_post = video_to_post(video, rel_thumbnail)
-    post_file = f'{out_dir}/content/{section}/{ulid}.md'
+    post_file = f'{out_dir}/content/{section}/{video.video_id}.md'
     parent = Path(post_file).parent
     os.makedirs(parent, exist_ok=True)
     with open(post_file, mode='w') as f:
@@ -124,7 +124,7 @@ def main():
     parser.add_argument('out_dir')
     args = parser.parse_args()
 
-    videos = fetch_uploads(api_key, channel_id, 5)
+    videos = fetch_uploads(api_key, channel_id, 8)
     for video in videos:
         write_video(video, args.section_name, args.out_dir)
 
