@@ -115,6 +115,10 @@ def main():
 
     api_key = os.getenv("API_KEY")
     channel_id = os.getenv("CHANNEL_ID")
+    if api_key is None:
+        raise(NameError('API_KEY wasn\'t provided'))
+    if channel_id is None:
+        raise(NameError('CHANNEL_ID wasn\'t provided'))
 
     parser = argparse.ArgumentParser()
     parser.add_argument('section_name')
