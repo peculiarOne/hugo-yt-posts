@@ -2,7 +2,6 @@ import os
 import requests
 import argparse
 
-from ulid import ULID
 from pathlib import Path
 from dotenv import load_dotenv
 from dateutil import parser
@@ -53,8 +52,6 @@ def video_to_post(video, thumbnail):
     )
 
 def write_video(video, section, out_dir):
-    ulid = str(ULID())
-
     rel_thumbnail = f'img/{section}/{video.video_id}.jpg'
     thumbnail_file = f'{out_dir}/static/{rel_thumbnail}'
     download_thumbnail(video.thumbnail_url, thumbnail_file)
