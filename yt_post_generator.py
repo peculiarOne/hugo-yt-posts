@@ -99,11 +99,15 @@ def fetch_uploads(api_key, channel_id, count):
     def item_to_video(playlist_item):
         print("playlist item:\n", playlist_item)
         snippet = playlist_item["snippet"]
+        thumbnail = snippet["thumbnails"].get("standard")
+        if thumbnail is None:
+            thumbnail = snippet["thumbnails"].get("default")
+
         return Video(
             publish_date = parser.isoparse(snippet["publishedAt"]),
             title = snippet["title"],
             video_id = snippet["resourceId"]["videoId"],
-            thumbnail_url = snippet["thumbnails"]["standard"]["url"]
+            thumbnail_url = thumbnail["url"]
         )
 
     videos = list(map(item_to_video, playlist_items_response["items"]))
